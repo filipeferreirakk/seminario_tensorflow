@@ -61,3 +61,22 @@ function limpar() {
 }
 
 document.getElementById("limpar").addEventListener("click", limpar);
+
+// ----- Predição -----
+async function prever() {
+  const imagem = quadro.toDataURL("image/png");
+
+  const resposta = await fetch("/prever", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ imagem }),
+  });
+
+  const dados = await resposta.json();
+
+  document.getElementById("digito").textContent = dados.digito;
+  document.getElementById("confianca").textContent =
+    "confiança: " + Math.round(dados.confianca * 100) + "%";
+}
+
+document.getElementById("prever").addEventListener("click", prever);
