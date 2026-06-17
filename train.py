@@ -59,3 +59,5 @@ if __name__ == "__main__":
         loss="sparse_categorical_crossentropy",
         metrics=["accuracy"],
     )
+
+    modelo.fit(x_treino, y_treino, epochs=EPOCAS, validation_split=0.1)
