@@ -4,6 +4,7 @@ import matplotlib
 
 matplotlib.use("Agg")  # só salva imagens, sem abrir janela
 import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
 
 from utils import normalizar
@@ -76,6 +77,27 @@ def plotar_historico(historico, caminho="historico.png"):
     print(f"Histórico salvo em {caminho}")
 
 
+def salvar_predicoes(modelo, x_teste, y_teste, caminho="predicoes.png"):
+    """Mostra o que o modelo prevê em 9 imagens de teste.
+    Verde = acertou, vermelho = errou.
+    """
+    probs = modelo.predict(x_teste[:9], verbose=0)
+    preditos = np.argmax(probs, axis=1)
+
+    plt.figure(figsize=(6, 6))
+    for i in range(9):
+        plt.subplot(3, 3, i + 1)
+        plt.imshow(x_teste[i], cmap="gray")
+        cor = "green" if preditos[i] == y_teste[i] else "red"
+        confianca = 100 * np.max(probs[i])
+        plt.title(f"{preditos[i]} ({confianca:.0f}%)", color=cor)
+        plt.axis("off")
+    plt.tight_layout()
+    plt.savefig(caminho)
+    plt.close()
+    print(f"Predições salvas em {caminho}")
+
+
 if __name__ == "__main__":
     (x_treino, y_treino), (x_teste, y_teste) = carregar_dados()
     salvar_amostras(x_treino, y_treino)
@@ -93,6 +115,7 @@ if __name__ == "__main__":
     print(f"\nAcurácia no teste: {acuracia:.4f}  |  Perda: {perda:.4f}")
 
     plotar_historico(historico)
+    salvar_predicoes(modelo, x_teste, y_teste)
 
     modelo.save(CAMINHO_MODELO)
     print(f"Modelo salvo em {CAMINHO_MODELO}")
