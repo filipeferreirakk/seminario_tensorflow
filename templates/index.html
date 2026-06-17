@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reconhecimento de Dígitos · TensorFlow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <main class="app">
+    <header class="cabecalho">
+      <p class="eyebrow">TensorFlow · MNIST</p>
+      <h1>Desenhe um dígito</h1>
+      <p class="subtitulo">A rede neural prevê o número de 0 a 9 em tempo real.</p>
+    </header>
+
+    <section class="painel">
+      <div class="bloco-canvas">
+        <canvas id="quadro" width="280" height="280"></canvas>
+        <div class="botoes">
+          <button id="limpar" class="btn btn-secundario">Limpar</button>
+          <button id="prever" class="btn btn-primario">Prever</button>
+        </div>
+      </div>
+
+      <div class="bloco-resultado">
+        <div class="digito-previsto">
+          <span id="digito">—</span>
+          <p id="confianca" class="confianca">aguardando desenho</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
