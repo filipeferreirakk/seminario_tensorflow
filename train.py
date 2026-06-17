@@ -50,6 +50,28 @@ def construir_modelo():
     return modelo
 
 
+def plotar_historico(historico, caminho="historico.png"):
+    """Gera as curvas de acurácia e perda ao longo das épocas."""
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+
+    ax1.plot(historico.history["accuracy"], label="treino")
+    ax1.plot(historico.history["val_accuracy"], label="validação")
+    ax1.set_title("Acurácia")
+    ax1.set_xlabel("Época")
+    ax1.legend()
+
+    ax2.plot(historico.history["loss"], label="treino")
+    ax2.plot(historico.history["val_loss"], label="validação")
+    ax2.set_title("Perda")
+    ax2.set_xlabel("Época")
+    ax2.legend()
+
+    plt.tight_layout()
+    plt.savefig(caminho)
+    plt.close()
+    print(f"Histórico salvo em {caminho}")
+
+
 if __name__ == "__main__":
     (x_treino, y_treino), (x_teste, y_teste) = carregar_dados()
     salvar_amostras(x_treino, y_treino)
@@ -61,10 +83,12 @@ if __name__ == "__main__":
         metrics=["accuracy"],
     )
 
-    modelo.fit(x_treino, y_treino, epochs=EPOCAS, validation_split=0.1)
+    historico = modelo.fit(x_treino, y_treino, epochs=EPOCAS, validation_split=0.1)
 
     perda, acuracia = modelo.evaluate(x_teste, y_teste, verbose=0)
     print(f"\nAcurácia no teste: {acuracia:.4f}  |  Perda: {perda:.4f}")
+
+    plotar_historico(historico)
 
     modelo.save(CAMINHO_MODELO)
     print(f"Modelo salvo em {CAMINHO_MODELO}")
