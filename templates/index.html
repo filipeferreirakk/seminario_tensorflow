@@ -15,6 +15,7 @@
     </header>
 
     <section class="painel">
+      <!-- Área de desenho -->
       <div class="bloco-canvas">
         <canvas id="quadro" width="280" height="280"></canvas>
         <div class="botoes">
@@ -23,10 +24,15 @@
         </div>
       </div>
 
+      <!-- Resultado -->
       <div class="bloco-resultado">
         <div class="digito-previsto">
           <span id="digito">—</span>
           <p id="confianca" class="confianca">aguardando desenho</p>
+        </div>
+
+        <div class="barras" id="barras">
+          <!-- as 10 barras de confiança são geradas pelo JavaScript -->
         </div>
       </div>
     </section>
