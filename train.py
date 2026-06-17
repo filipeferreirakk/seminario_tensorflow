@@ -6,6 +6,8 @@ matplotlib.use("Agg")  # só salva imagens, sem abrir janela
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
+from utils import normalizar
+
 EPOCAS = 5
 CAMINHO_MODELO = "mnist_model.keras"
 
@@ -15,8 +17,8 @@ def carregar_dados():
     (x_treino, y_treino), (x_teste, y_teste) = tf.keras.datasets.mnist.load_data()
     print(f"Treino: {x_treino.shape}  |  Teste: {x_teste.shape}")
 
-    x_treino = x_treino.astype("float32") / 255.0
-    x_teste = x_teste.astype("float32") / 255.0
+    x_treino = normalizar(x_treino)
+    x_teste = normalizar(x_teste)
     return (x_treino, y_treino), (x_teste, y_teste)
 
 
