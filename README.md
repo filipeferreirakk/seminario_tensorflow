@@ -17,7 +17,7 @@ com a confiança de cada classe.
 
 ## Estrutura
 
-\`\`\`
+```
 mnist-tensorflow/
 ├── train.py            # treina a rede e gera o modelo + gráficos
 ├── app.py              # servidor Flask com a demonstração ao vivo
@@ -29,33 +29,33 @@ mnist-tensorflow/
 │   └── script.js       # desenho no canvas + chamada de predição
 ├── requirements.txt
 └── README.md
-\`\`\`
+```
 
 ## Como rodar
 
 1. Crie um ambiente virtual e instale as dependências:
 
-   \`\`\`bash
+   ```bash
    python -m venv venv
    source venv/bin/activate        # Windows: venv\Scripts\activate
    pip install -r requirements.txt
-   \`\`\`
+   ```
 
 2. Treine o modelo (baixa o MNIST automaticamente na primeira vez):
 
-   \`\`\`bash
+   ```bash
    python train.py
-   \`\`\`
+   ```
 
-   Isso gera o arquivo \`mnist_model.keras\` e algumas imagens
-   (\`amostras.png\`, \`historico.png\`, \`predicoes.png\`, \`matriz_confusao.png\`)
+   Isso gera o arquivo `mnist_model.keras` e algumas imagens
+   (`amostras.png`, `historico.png`, `predicoes.png`, `matriz_confusao.png`)
    úteis para a apresentação.
 
 3. Suba a aplicação web:
 
-   \`\`\`bash
+   ```bash
    python app.py
-   \`\`\`
+   ```
 
    Abra <http://127.0.0.1:5000> no navegador, desenhe um dígito e clique em
    **Prever**.
