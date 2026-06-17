@@ -1,8 +1,19 @@
-"""Treino de uma rede neural para reconhecer dígitos manuscritos (MNIST)."""
+"""
+Treino de uma rede neural simples para reconhecer dígitos manuscritos (MNIST).
+
+Execute com:  python train.py
+
+Ao final, gera:
+  - mnist_model.keras  (o modelo treinado, carregado depois pelo app)
+  - amostras.png       (exemplos do dataset)
+  - historico.png      (curvas de acurácia e perda durante o treino)
+  - predicoes.png      (predições do modelo em imagens de teste)
+  - matriz_confusao.png(onde o modelo mais erra)
+"""
 
 import matplotlib
 
-matplotlib.use("Agg")  # só salva imagens, sem abrir janela
+matplotlib.use("Agg")  # backend sem janela: só salva arquivos de imagem
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -14,7 +25,11 @@ CAMINHO_MODELO = "mnist_model.keras"
 
 
 def carregar_dados():
-    """Baixa o MNIST e normaliza os pixels para a faixa 0-1."""
+    """Baixa o MNIST e separa em treino e teste.
+
+    São 70.000 imagens 28x28 em tons de cinza: 60k para treinar e 10k
+    para testar. Cada imagem tem um rótulo de 0 a 9.
+    """
     (x_treino, y_treino), (x_teste, y_teste) = tf.keras.datasets.mnist.load_data()
     print(f"Treino: {x_treino.shape}  |  Teste: {x_teste.shape}")
 
@@ -24,7 +39,7 @@ def carregar_dados():
 
 
 def salvar_amostras(x, y, caminho="amostras.png"):
-    """Salva um grid 3x3 com exemplos do dataset."""
+    """Salva um grid 3x3 com exemplos do dataset (bom para a apresentação)."""
     plt.figure(figsize=(5, 5))
     for i in range(9):
         plt.subplot(3, 3, i + 1)
@@ -38,9 +53,12 @@ def salvar_amostras(x, y, caminho="amostras.png"):
 
 
 def construir_modelo():
-    """Define a arquitetura da rede:
-      Flatten -> Dense(128, relu) -> Dropout(0.2) -> Dense(10, softmax).
-    O Dropout desliga 20% dos neurônios no treino para evitar overfitting.
+    """Define a arquitetura da rede.
+
+      Flatten : transforma a imagem 28x28 em um vetor de 784 números.
+      Dense   : camada totalmente conectada com 128 neurônios + ReLU.
+      Dropout : desliga 20% dos neurônios no treino para evitar decorar.
+      Dense   : 10 saídas (uma por dígito) com softmax = probabilidades.
     """
     modelo = tf.keras.Sequential(
         [
@@ -79,7 +97,8 @@ def plotar_historico(historico, caminho="historico.png"):
 
 def salvar_predicoes(modelo, x_teste, y_teste, caminho="predicoes.png"):
     """Mostra o que o modelo prevê em 9 imagens de teste.
-    Verde = acertou, vermelho = errou.
+
+    Verde = acertou, vermelho = errou. Ótimo para comentar no seminário.
     """
     probs = modelo.predict(x_teste[:9], verbose=0)
     preditos = np.argmax(probs, axis=1)
@@ -98,7 +117,27 @@ def salvar_predicoes(modelo, x_teste, y_teste, caminho="predicoes.png"):
     print(f"Predições salvas em {caminho}")
 
 
-if __name__ == "__main__":
+def salvar_matriz_confusao(modelo, x_teste, y_teste, caminho="matriz_confusao.png"):
+    """Matriz de confusão: mostra quais dígitos o modelo troca entre si."""
+    probs = modelo.predict(x_teste, verbose=0)
+    preditos = np.argmax(probs, axis=1)
+    matriz = tf.math.confusion_matrix(y_teste, preditos).numpy()
+
+    plt.figure(figsize=(6, 5))
+    plt.imshow(matriz, cmap="Blues")
+    plt.colorbar()
+    plt.title("Matriz de confusão")
+    plt.xlabel("Previsto")
+    plt.ylabel("Real")
+    plt.xticks(range(10))
+    plt.yticks(range(10))
+    plt.tight_layout()
+    plt.savefig(caminho)
+    plt.close()
+    print(f"Matriz de confusão salva em {caminho}")
+
+
+def main():
     (x_treino, y_treino), (x_teste, y_teste) = carregar_dados()
     salvar_amostras(x_treino, y_treino)
 
@@ -109,13 +148,23 @@ if __name__ == "__main__":
         metrics=["accuracy"],
     )
 
-    historico = modelo.fit(x_treino, y_treino, epochs=EPOCAS, validation_split=0.1)
+    historico = modelo.fit(
+        x_treino,
+        y_treino,
+        epochs=EPOCAS,
+        validation_split=0.1,
+    )
 
     perda, acuracia = modelo.evaluate(x_teste, y_teste, verbose=0)
     print(f"\nAcurácia no teste: {acuracia:.4f}  |  Perda: {perda:.4f}")
 
     plotar_historico(historico)
     salvar_predicoes(modelo, x_teste, y_teste)
+    salvar_matriz_confusao(modelo, x_teste, y_teste)
 
     modelo.save(CAMINHO_MODELO)
-    print(f"Modelo salvo em {CAMINHO_MODELO}")
+    print(f"\nModelo salvo em {CAMINHO_MODELO}")
+
+
+if __name__ == "__main__":
+    main()
