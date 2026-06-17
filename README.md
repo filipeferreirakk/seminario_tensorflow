@@ -5,8 +5,6 @@ treinada no dataset **MNIST** para reconhecer dígitos de 0 a 9, e uma pequena
 aplicação web permite **desenhar um número com o mouse e ver a predição ao vivo**,
 com a confiança de cada classe.
 
-> Dica: depois de rodar `python train.py`, você pode tirar um print da
-> interface e adicioná-lo aqui para deixar o repositório mais bonito.
 
 ## O que o projeto mostra
 
