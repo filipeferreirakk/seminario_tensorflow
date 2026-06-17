@@ -38,13 +38,15 @@ def salvar_amostras(x, y, caminho="amostras.png"):
 
 def construir_modelo():
     """Define a arquitetura da rede:
-      Flatten -> Dense(128, relu) -> Dense(10, softmax).
+      Flatten -> Dense(128, relu) -> Dropout(0.2) -> Dense(10, softmax).
+    O Dropout desliga 20% dos neurônios no treino para evitar overfitting.
     """
     modelo = tf.keras.Sequential(
         [
             tf.keras.layers.Input(shape=(28, 28)),
             tf.keras.layers.Flatten(),
             tf.keras.layers.Dense(128, activation="relu"),
+            tf.keras.layers.Dropout(0.2),
             tf.keras.layers.Dense(10, activation="softmax"),
         ]
     )
