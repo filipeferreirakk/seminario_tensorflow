@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 
 EPOCAS = 5
+CAMINHO_MODELO = "mnist_model.keras"
 
 
 def carregar_dados():
@@ -64,3 +65,6 @@ if __name__ == "__main__":
 
     perda, acuracia = modelo.evaluate(x_teste, y_teste, verbose=0)
     print(f"\nAcurácia no teste: {acuracia:.4f}  |  Perda: {perda:.4f}")
+
+    modelo.save(CAMINHO_MODELO)
+    print(f"Modelo salvo em {CAMINHO_MODELO}")
