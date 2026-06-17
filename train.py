@@ -6,6 +6,8 @@ matplotlib.use("Agg")  # só salva imagens, sem abrir janela
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
+EPOCAS = 5
+
 
 def carregar_dados():
     """Baixa o MNIST e normaliza os pixels para a faixa 0-1."""
@@ -31,6 +33,24 @@ def salvar_amostras(x, y, caminho="amostras.png"):
     print(f"Amostras salvas em {caminho}")
 
 
+def construir_modelo():
+    """Define a arquitetura da rede:
+      Flatten -> Dense(128, relu) -> Dense(10, softmax).
+    """
+    modelo = tf.keras.Sequential(
+        [
+            tf.keras.layers.Input(shape=(28, 28)),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(128, activation="relu"),
+            tf.keras.layers.Dense(10, activation="softmax"),
+        ]
+    )
+    modelo.summary()
+    return modelo
+
+
 if __name__ == "__main__":
     (x_treino, y_treino), (x_teste, y_teste) = carregar_dados()
     salvar_amostras(x_treino, y_treino)
+
+    modelo = construir_modelo()
