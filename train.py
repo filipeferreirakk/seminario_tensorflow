@@ -61,3 +61,6 @@ if __name__ == "__main__":
     )
 
     modelo.fit(x_treino, y_treino, epochs=EPOCAS, validation_split=0.1)
+
+    perda, acuracia = modelo.evaluate(x_teste, y_teste, verbose=0)
+    print(f"\nAcurácia no teste: {acuracia:.4f}  |  Perda: {perda:.4f}")
