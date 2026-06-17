@@ -54,3 +54,8 @@ if __name__ == "__main__":
     salvar_amostras(x_treino, y_treino)
 
     modelo = construir_modelo()
+    modelo.compile(
+        optimizer="adam",
+        loss="sparse_categorical_crossentropy",
+        metrics=["accuracy"],
+    )
